@@ -87,6 +87,14 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+<script>
+  window.TrackJS && TrackJS.install({ 
+    token: "c86c3105a7824f4d9634b7e6c76fa9dd"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+</script>
+
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -95,13 +103,100 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      class DivideByZeroError extends Error{
+        constructor(message) {
+        super(message);
+        this.name = "DivideByZeroError"; 
+        }
+      }
+      if(secondNum == 0 && operator == '/'){
+        throw new DivideByZeroError('Cannot divide by 0!');
+      }
+      try{
+        if(isNaN(firstNum) || isNaN(secondNum)){
+          throw new Error('Values must be numbers!');
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      }
+      catch(err){
+        console.log(err.message);
+      }
+      finally{
+        alert('Thank you for using my calculator!')
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener('click', () => {
+      console.log('Console Log Demo');
+    });
+
+    errorBtns[1].addEventListener('click', () => {
+      console.error('Console Error Demo');
+    });
+
+    errorBtns[2].addEventListener('click', () => {
+      console.count("Count Button:");
+    });
+
+    errorBtns[3].addEventListener('click', () => {
+      console.warn("Console Warn Button");
+    });
+
+    errorBtns[4].addEventListener('click', () => {
+      const num = 2;
+      const errorMsg = 'The number does not equal 3'
+      console.assert(num == 3, errorMsg, {num, errorMsg});
+    });
+
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+
+    errorBtns[6].addEventListener('click', () => {
+      console.dir(document.head);
+    });
+
+    errorBtns[7].addEventListener('click', () => {
+      console.dirxml(document.head);
+    });
+
+    errorBtns[8].addEventListener('click', () => {
+      console.group("console.group");
+    });
+
+    errorBtns[9].addEventListener('click', () => {
+      console.groupEnd();
+    });
+
+    errorBtns[10].addEventListener('click', () => {
+      var colors = ['red', 'blue', 'yellow'];
+      console.table(colors);
+    });
+
+    errorBtns[11].addEventListener('click', () => {
+      console.time();
+    });
+
+    errorBtns[12].addEventListener('click', () => {
+      console.timeEnd();
+    });
+
+    errorBtns[13].addEventListener('click', () => {
+      const deep = () => { deeper(); };
+      const deeper = () => { deepest(); };
+      const deepest = () => { console.trace(); };
+      deep();
+    });
+
+    window.onerror = function(errorMessage, url, lineNumber) {
+      console.log(`Oh no! An error!`);
+    };
+    errorBtns[14].addEventListener('click', () => {
+      randomFunction();
+    });
   </script>
 </body>
 
